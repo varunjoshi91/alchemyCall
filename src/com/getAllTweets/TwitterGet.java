@@ -17,7 +17,7 @@ public class TwitterGet {
 
     Twitter twitter;
     //String searchString = "фильм AND lang:ru";
-    String searchString = "#usopen";
+    String searchString = "#prayforparis";
     List<Status> tweets;
     int totalTweets;
 
@@ -47,7 +47,7 @@ public class TwitterGet {
             QueryResult result = twitter.search(query);
             tweets = result.getTweets(); // the return of this function is list
 
-            PrintWriter writer = new PrintWriter("lateNight.json", "UTF-8"); //name of the file
+            PrintWriter writer = new PrintWriter("!!!123lateNight123.json", "UTF-8"); //name of the file
 
 
             for (Status tweet : tweets) {

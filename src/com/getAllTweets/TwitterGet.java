@@ -17,7 +17,7 @@ public class TwitterGet {
 
     Twitter twitter;
     //String searchString = "фильм AND lang:ru";
-    String searchString = "#prayforparis";
+    String searchString = "Syrian refugee AND lang:en";
     List<Status> tweets;
     int totalTweets;
 
@@ -43,17 +43,23 @@ public class TwitterGet {
         try{
             Query query = new Query(searchString);
 
-            query.setCount(30); //by default its 15 set count
+            query.setCount(100); //by default its 15 set count
             QueryResult result = twitter.search(query);
             tweets = result.getTweets(); // the return of this function is list
 
-            PrintWriter writer = new PrintWriter("!!!123lateNight123.json", "UTF-8"); //name of the file
+
+
+            PrintWriter writer = new PrintWriter("!!!123lateedsNight123.json", "UTF-8"); //name of the file
+
+            PrintWriter writerObj = new PrintWriter("raw_json_1.json", "UTF-8"); //name of the file
 
 
             for (Status tweet : tweets) {
                 //System.out.println(tweet.getFromUser() + ":" + tweet.getText());
                 String json = TwitterObjectFactory.getRawJSON(tweet);
                 //System.out.println(json);
+                writerObj.println(json);
+
 
                 JSONObject obj = new JSONObject(json);
 
@@ -116,6 +122,7 @@ public class TwitterGet {
                 writer.println(newObj);
             }
             writer.close();
+            writerObj.close();
 
             /*tweets = result.getTweets();
 

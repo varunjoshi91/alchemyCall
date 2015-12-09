@@ -28,7 +28,7 @@ public class alchemyCall {
     public void readFromJSONFile(String fileName){
 
         try{
-            PrintWriter writer = new PrintWriter("simple_waste_1.json", "UTF-8");
+            PrintWriter writer = new PrintWriter("varun_translated.json", "UTF-8");
 
             String aLine="";
             JSONParser parser = new JSONParser();
@@ -49,6 +49,26 @@ public class alchemyCall {
                 String concept = tryCatchBs(jsonObject.get("text").toString());
                 //System.out.println(concept);
 
+
+                String alphaAndDigits = jsonObject.get("text").toString().replaceAll("[ ](?=[ ])|[^-_,A-Za-z0-9 ]+","");
+                //System.out.println(alphaAndDigits);
+                String queryTextForLanguage = alphaAndDigits;
+
+
+                String[] translation=new String[5];
+
+                queryTrans queryTransObj = new queryTrans();
+                translation = queryTransObj.translate(queryTextForLanguage);
+                for(int k=0;k<translation.length;k++){
+                    if(translation[k] == null){
+                        translation[k] = queryTextForLanguage;
+                    }
+                }
+
+                for(int k=0;k<translation.length;k++)
+                    System.out.println("varun: "+translation[k]);
+
+
                 JSONParser newParser = new JSONParser();
                 Object newObjPar = new Object();
                 newObjPar = newParser.parse(concept);//varun
@@ -68,10 +88,17 @@ public class alchemyCall {
                 }
 
                 newObj.putAll(jsonObject);
+
+                newObj.put("text_ar",translation[0]);
+                newObj.put("text_en",translation[1]);
+                newObj.put("text_de",translation[2]);
+                newObj.put("text_fr",translation[3]);
+                newObj.put("text_ru",translation[4]);
+
                 newObj.put("concept_tag",conceptString);
                 newObj.put("relevance_tag",relevanceString);
 
-                //System.out.println(newObj.get("concept_tag"));
+                System.out.println(newObj.get("concept_tag"));
 
                 writer.println(newObj);
 
@@ -79,7 +106,7 @@ public class alchemyCall {
             br.close();
             writer.close();
 
-
+            System.out.println("Should be written by now");
 
 
 
@@ -97,6 +124,11 @@ public class alchemyCall {
     }
 
     public String tryCatchBs(String queryText){
+
+        String alphaAndDigits = queryText.replaceAll("[ ](?=[ ])|[^-_,A-Za-z0-9 ]+","");
+        //System.out.println(alphaAndDigits);
+        queryText = alphaAndDigits;
+
         String response="";
     try {
         String query = String.format("apikey=%s&text=%s`&outputMode=json",
@@ -167,7 +199,7 @@ public class alchemyCall {
     }
 
     public static void main(String []args) {
-        String queryFileName = "rj.json";//  /Users/varunjoshi/IdeaProjects/getTweets/queries.txt
+        String queryFileName = "input_en.json";//  /Users/varunjoshi/IdeaProjects/getTweets/queries.txt
         queryFileName = new File("").getAbsolutePath() +"/"+queryFileName;
         System.out.println(queryFileName);
         if (!QueryRun.IsFileExists(queryFileName) ) {

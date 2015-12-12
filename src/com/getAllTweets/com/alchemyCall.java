@@ -15,7 +15,9 @@ import org.json.simple.parser.JSONParser;
  */
 public class alchemyCall {
 
-    final String apiKey = "a400b5e6a60265dc15f9e405f4fcc0795545396c";
+    //final String apiKey = "a400b5e6a60265dc15f9e405f4fcc0795545396c"; //b5a7eac1c3cb5661d5e86e90ce7d4ec43b72e02c
+    //final String apiKey = "b5a7eac1c3cb5661d5e86e90ce7d4ec43b72e02c";
+    final String apiKey = "97edb7c6acab0aa0d7a18f746e4b83ea243a2837";
     final String alchemyUrl = "http://gateway-a.watsonplatform.net/calls/text/TextGetRankedConcepts";
     private String charset = java.nio.charset.StandardCharsets.UTF_8.name();
     private final String USER_AGENT  = "Mozilla/5.0";
@@ -28,7 +30,7 @@ public class alchemyCall {
     public void readFromJSONFile(String fileName){
 
         try{
-            PrintWriter writer = new PrintWriter("varun_translated.json", "UTF-8");
+            PrintWriter writer = new PrintWriter("raw_added/german_2.json", "UTF-8");
 
             String aLine="";
             JSONParser parser = new JSONParser();
@@ -42,15 +44,16 @@ public class alchemyCall {
             FileInputStream fstream1 = new FileInputStream(fileName);
             DataInputStream in = new DataInputStream(fstream1);
             BufferedReader br   = new BufferedReader(new InputStreamReader(in, "UTF8"));
+            int index=0;
             while ( (aLine = br.readLine())  != null) {
                 JSONObject newObj = new JSONObject();
-                obj = parser.parse(aLine);
+                obj = parser.parse(aLine.toString());
                 JSONObject jsonObject = (JSONObject) obj;
                 String concept = tryCatchBs(jsonObject.get("text").toString());
                 //System.out.println(concept);
 
 
-                String alphaAndDigits = jsonObject.get("text").toString().replaceAll("[ ](?=[ ])|[^-_,A-Za-z0-9 ]+","");
+                String alphaAndDigits = jsonObject.get("text").toString().replaceAll("[ ](?=[ ])|[^A-Za-z0-9 ]+","");
                 //System.out.println(alphaAndDigits);
                 String queryTextForLanguage = alphaAndDigits;
 
@@ -65,13 +68,13 @@ public class alchemyCall {
                     }
                 }
 
-                for(int k=0;k<translation.length;k++)
-                    System.out.println("varun: "+translation[k]);
+                /*for(int k=0;k<translation.length;k++)
+                    System.out.println("varun: "+translation[k]);*/
 
 
                 JSONParser newParser = new JSONParser();
                 Object newObjPar = new Object();
-                newObjPar = newParser.parse(concept);//varun
+                newObjPar = newParser.parse(concept.toString());//varun
 
                 JSONArray conceptObj = (JSONArray) newObjPar;
                 JSONObject tempObj = new JSONObject();
@@ -98,15 +101,17 @@ public class alchemyCall {
                 newObj.put("concept_tag",conceptString);
                 newObj.put("relevance_tag",relevanceString);
 
-                System.out.println(newObj.get("concept_tag"));
+                //System.out.println(newObj.get("concept_tag"));
 
                 writer.println(newObj);
+                index++;
+                System.out.println(index);
 
             }
             br.close();
             writer.close();
 
-            System.out.println("Should be written by now");
+            //System.out.println("Should be written by now");
 
 
 
@@ -128,7 +133,7 @@ public class alchemyCall {
         String alphaAndDigits = queryText.replaceAll("[ ](?=[ ])|[^-_,A-Za-z0-9 ]+","");
         //System.out.println(alphaAndDigits);
         queryText = alphaAndDigits;
-
+        //System.out.println(apiKey);
         String response="";
     try {
         String query = String.format("apikey=%s&text=%s`&outputMode=json",
@@ -136,13 +141,13 @@ public class alchemyCall {
                 URLEncoder.encode(queryText, charset));
 
         response = fetchHTTPData(alchemyUrl, query);
-
+        //System.out.println(response.toString());
        // JSONObject jsonResponse = new JSONObject(response);
 
         Object myObject = new Object(); // blank object
 
         JSONParser parserObj = new JSONParser();
-        myObject = parserObj.parse(response); // parsed string output to json
+        myObject = parserObj.parse(response.toString()); // parsed string output to json
 
         JSONObject jsonObject = (JSONObject) myObject;
 
@@ -199,9 +204,9 @@ public class alchemyCall {
     }
 
     public static void main(String []args) {
-        String queryFileName = "input_en.json";//  /Users/varunjoshi/IdeaProjects/getTweets/queries.txt
+        String queryFileName = "raw/700-900.json";//  /Users/varunjoshi/IdeaProjects/getTweets/queries.txt
         queryFileName = new File("").getAbsolutePath() +"/"+queryFileName;
-        System.out.println(queryFileName);
+        //System.out.println(queryFileName);
         if (!QueryRun.IsFileExists(queryFileName) ) {
             System.out.println("Please provide queries.txt file in the current directory ! File not found...");
             return;

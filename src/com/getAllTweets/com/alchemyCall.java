@@ -5,6 +5,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.Stack;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -25,19 +26,20 @@ public class alchemyCall {
 
 
 
+
+
     //String text = "Everyone Thinks #Drake\\u2019s Brutal \\\"Diamonds Dancing\\\" Verse Is About Nicki Minaj http://t.co/zqByrinj69 http://t.co/gOmYBUz491";
 
     public void readFromJSONFile(String fileName){
 
         try{
-            PrintWriter writer = new PrintWriter("raw_added/german_2.json", "UTF-8");
+            PrintWriter writer = new PrintWriter("allergy_concepts/1.json", "UTF-8");
 
             String aLine="";
             JSONParser parser = new JSONParser();
             Object obj = new Object();
 
             /*Write to JSON*/
-
 
 
 
@@ -204,7 +206,7 @@ public class alchemyCall {
     }
 
     public static void main(String []args) {
-        String queryFileName = "raw/700-900.json";//  /Users/varunjoshi/IdeaProjects/getTweets/queries.txt
+        String queryFileName = "allergy_raw/1.json";//  /Users/varunjoshi/IdeaProjects/getTweets/queries.txt
         queryFileName = new File("").getAbsolutePath() +"/"+queryFileName;
         //System.out.println(queryFileName);
         if (!QueryRun.IsFileExists(queryFileName) ) {

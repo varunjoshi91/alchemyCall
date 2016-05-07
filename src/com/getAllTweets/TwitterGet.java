@@ -16,7 +16,7 @@ import java.io.*;
 public class TwitterGet {
 
     Twitter twitter;
-    String searchString = "Путин AND lang:ru";
+    String searchString = "peanut allergy";
     //String searchString = "#prayforparis AND lang:en";
     List<Status> tweets;
     int totalTweets;
@@ -49,9 +49,9 @@ public class TwitterGet {
 
 
 
-            PrintWriter writer = new PrintWriter("!!!123lateedsNight123.json", "UTF-8"); //name of the file
+            PrintWriter writer = new PrintWriter("allergy/1.json", "UTF-8"); //name of the file
 
-            PrintWriter writerObj = new PrintWriter("raw/raw_json_prayforparis.json", "UTF-8"); //name of the file
+            PrintWriter writerObj = new PrintWriter("allergy_raw/1.json", "UTF-8"); //name of the file
 
 
             for (Status tweet : tweets) {
